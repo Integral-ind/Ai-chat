@@ -1,0 +1,9 @@
+{
+  "name": "Integral_app",
+  "description": "A comprehensive productivity and task management application designed to help users organize their work, track progress, and gain insights into their productivity patterns. Features include dashboard overview, task management, calendar integration, project tracking, notes, analytics, team collaboration, and settings.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "prompt": ""
+}

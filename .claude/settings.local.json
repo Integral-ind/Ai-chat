@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(rm:*)",
+      "Bash(npm run dev:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm install:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm start)",
+      "Bash(npm run:*)",
+      "Bash(npx kill-port:*)",
+      "Bash(grep:*)",
+      "Bash(echo:*)",
+      "Bash(chmod:*)",
+      "Bash(node:*)",
+      "Bash(pkill:*)",
+      "Bash(true)",
+      "Bash(find:*)",
+      "Bash(tail:*)",
+      "Bash(ls:*)",
+      "Bash(npm test:*)"
+    ],
+    "deny": []
+  }
+}

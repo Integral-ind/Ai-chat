@@ -1,0 +1,36 @@
+| trigger_name                               | event  | table_name                | timing | function_called                                            | created |
+| ------------------------------------------ | ------ | ------------------------- | ------ | ---------------------------------------------------------- | ------- |
+| enforce_bucket_name_length_trigger         | UPDATE | buckets                   | BEFORE | EXECUTE FUNCTION storage.enforce_bucket_name_length()      | null    |
+| enforce_bucket_name_length_trigger         | INSERT | buckets                   | BEFORE | EXECUTE FUNCTION storage.enforce_bucket_name_length()      | null    |
+| update_calendar_events_updated_at          | UPDATE | calendar_events           | BEFORE | EXECUTE FUNCTION update_updated_at_column()                | null    |
+| validate_calendar_event_ownership_insert   | INSERT | calendar_events           | BEFORE | EXECUTE FUNCTION validate_calendar_event_task_ownership()  | null    |
+| validate_calendar_event_ownership_update   | UPDATE | calendar_events           | BEFORE | EXECUTE FUNCTION validate_calendar_event_task_ownership()  | null    |
+| update_departments_updated_at              | UPDATE | departments               | BEFORE | EXECUTE FUNCTION update_updated_at_column()                | null    |
+| update_email_queue_updated_at              | UPDATE | email_notifications_queue | BEFORE | EXECUTE FUNCTION update_updated_at_column()                | null    |
+| update_messages_updated_at                 | UPDATE | messages                  | BEFORE | EXECUTE FUNCTION update_updated_at_column()                | null    |
+| on_notes_updated                           | UPDATE | notes                     | BEFORE | EXECUTE FUNCTION handle_updated_at()                       | null    |
+| update_notification_preferences_updated_at | UPDATE | notification_preferences  | BEFORE | EXECUTE FUNCTION update_updated_at_column()                | null    |
+| update_notifications_updated_at            | UPDATE | notifications             | BEFORE | EXECUTE FUNCTION update_updated_at_column()                | null    |
+| objects_delete_delete_prefix               | DELETE | objects                   | AFTER  | EXECUTE FUNCTION storage.delete_prefix_hierarchy_trigger() | null    |
+| objects_insert_create_prefix               | INSERT | objects                   | BEFORE | EXECUTE FUNCTION storage.objects_insert_prefix_trigger()   | null    |
+| objects_update_create_prefix               | UPDATE | objects                   | BEFORE | EXECUTE FUNCTION storage.objects_update_prefix_trigger()   | null    |
+| update_objects_updated_at                  | UPDATE | objects                   | BEFORE | EXECUTE FUNCTION storage.update_updated_at_column()        | null    |
+| prefixes_create_hierarchy                  | INSERT | prefixes                  | BEFORE | EXECUTE FUNCTION storage.prefixes_insert_trigger()         | null    |
+| prefixes_delete_hierarchy                  | DELETE | prefixes                  | AFTER  | EXECUTE FUNCTION storage.delete_prefix_hierarchy_trigger() | null    |
+| trigger_update_updated_at_projects         | UPDATE | projects                  | BEFORE | EXECUTE FUNCTION update_updated_at_column()                | null    |
+| update_push_subscriptions_updated_at       | UPDATE | push_subscriptions        | BEFORE | EXECUTE FUNCTION update_updated_at_column()                | null    |
+| team_resource_count_trigger                | UPDATE | resources                 | AFTER  | EXECUTE FUNCTION update_team_resource_count()              | null    |
+| team_resource_count_trigger                | DELETE | resources                 | AFTER  | EXECUTE FUNCTION update_team_resource_count()              | null    |
+| team_resource_count_trigger                | INSERT | resources                 | AFTER  | EXECUTE FUNCTION update_team_resource_count()              | null    |
+| tr_check_filters                           | INSERT | subscription              | BEFORE | EXECUTE FUNCTION realtime.subscription_check_filters()     | null    |
+| tr_check_filters                           | UPDATE | subscription              | BEFORE | EXECUTE FUNCTION realtime.subscription_check_filters()     | null    |
+| task_assignment_notification_trigger       | INSERT | tasks                     | AFTER  | EXECUTE FUNCTION create_task_assignment_notification()     | null    |
+| task_completion_notification_trigger       | UPDATE | tasks                     | AFTER  | EXECUTE FUNCTION create_task_completion_notification()     | null    |
+| trigger_set_completed_at                   | UPDATE | tasks                     | BEFORE | EXECUTE FUNCTION set_completed_at()                        | null    |
+| validate_task_ownership_insert             | INSERT | tasks                     | BEFORE | EXECUTE FUNCTION validate_task_project_ownership()         | null    |
+| validate_task_ownership_update             | UPDATE | tasks                     | BEFORE | EXECUTE FUNCTION validate_task_project_ownership()         | null    |
+| trigger_set_invite_code                    | INSERT | team_invites              | BEFORE | EXECUTE FUNCTION set_invite_code()                         | null    |
+| update_teams_updated_at                    | UPDATE | teams                     | BEFORE | EXECUTE FUNCTION update_updated_at_column()                | null    |
+| trigger_update_updated_at_user_profiles    | UPDATE | user_profiles             | BEFORE | EXECUTE FUNCTION update_updated_at_column()                | null    |
+| update_user_profiles_updated_at            | UPDATE | user_profiles             | BEFORE | EXECUTE FUNCTION update_updated_at_column()                | null    |
+| create_user_profile_trigger                | INSERT | users                     | AFTER  | EXECUTE FUNCTION create_user_profile()                     | null    |

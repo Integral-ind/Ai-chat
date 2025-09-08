@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <!-- Temporarily disable CSP for development -->
+  <meta http-equiv="Content-Security-Policy" content="">
+  <title>Integral</title>
+  <!-- Traditional favicon -->
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="16x16 32x32">
+  
+  <!-- PNG favicons for better quality -->
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png">
+  
+  <!-- Apple Touch Icons (iOS home screen) -->
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  <!-- Android Chrome -->
+  <link rel="manifest" href="/site.webmanifest">
+  
+  <!-- Theme colors -->
+  <meta name="theme-color" content="#ffffff">
+  <meta name="msapplication-navbutton-color" content="#ffffff">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          screens: {
+            'xs': '375px',
+            'sm': '640px',
+            'md': '768px',
+            'lg': '1024px',
+            'xl': '1280px',
+            '2xl': '1536px',
+            'mobile': {'max': '767px'},
+            'tablet': {'min': '768px', 'max': '1023px'},
+            'desktop': {'min': '1024px'},
+          },
+          colors: {
+            primary: {
+              DEFAULT: '#059669',
+              light: '#10B981',
+              dark: '#047857',
+            },
+            secondary: {
+              DEFAULT: '#10B981',
+              light: '#34D399',
+            },
+            accent: {
+              DEFAULT: '#F59E0B',
+              light: '#FCD34D',
+            },
+            background: {
+              DEFAULT: '#F9FAFB',
+              dark: '#0F0F0F'
+            },
+            card: {
+              DEFAULT: '#FFFFFF',
+              dark: '#1A1A1A'
+            },
+            surface: {
+              DEFAULT: '#F3F4F6',
+              dark: '#252525'
+            },
+            text: {
+              DEFAULT: '#1F2937',
+              dark: '#E5E5E5'
+            },
+            muted: {
+              DEFAULT: '#6B7280',
+              dark: '#A1A1A1'
+            },
+            border: {
+              DEFAULT: '#E5E7EB',
+              dark: '#4B5563'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+            display: ['Prata', 'serif'],
+          },
+          fontSize: {
+            'xs': ['0.75rem', { lineHeight: '1rem' }],
+            'sm': ['0.875rem', { lineHeight: '1.25rem' }],
+            'base': ['1rem', { lineHeight: '1.5rem' }],
+            'lg': ['1.125rem', { lineHeight: '1.75rem' }],
+            'xl': ['1.25rem', { lineHeight: '1.75rem' }],
+            '2xl': ['1.5rem', { lineHeight: '2rem' }],
+            '3xl': ['1.875rem', { lineHeight: '2.25rem' }],
+            '4xl': ['2.25rem', { lineHeight: '2.5rem' }],
+            '5xl': ['3rem', { lineHeight: '1' }],
+            '6xl': ['3.75rem', { lineHeight: '1' }],
+          },
+          spacing: {
+            '18': '4.5rem',
+            '88': '22rem',
+            '128': '32rem',
+            'safe-top': 'env(safe-area-inset-top)',
+            'safe-bottom': 'env(safe-area-inset-bottom)',
+            'safe-left': 'env(safe-area-inset-left)',
+            'safe-right': 'env(safe-area-inset-right)',
+          },
+          borderRadius: {
+            'xl': '0.75rem',
+            '2xl': '1rem',
+            '3xl': '1.5rem',
+          },
+          minHeight: {
+            'screen-mobile': '100vh',
+            'screen-safe': 'calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
+          },
+          maxWidth: {
+            'xs': '20rem',
+            'mobile': '100vw',
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Quill CSS -->
+  <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+  <!-- Stream Video CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stream-io/video-react-sdk@1.3.3/dist/css/styles.css" />
+  <style>
+    /* ========================================
+       BASE STYLES
+       ======================================== */
+    
+    /* Base font and body settings */
+    html {
+      font-size: 16px;
+      -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+    }
+    
+    body { 
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      line-height: 1.5;
+      min-height: 100vh;
+      min-height: 100dvh; /* Dynamic viewport height for mobile */
+      overflow-x: hidden;
+    }
+
+    /* ========================================
+       RESPONSIVE TYPOGRAPHY
+       ======================================== */
+    
+    @media (max-width: 640px) {
+      html { font-size: 14px; }
+    }
+    
+    @media (min-width: 1024px) {
+      html { font-size: 16px; }
+    }
+    
+    @media (min-width: 1280px) {
+      html { font-size: 18px; }
+    }
+
+    /* ========================================
+       SCROLLBAR STYLES
+       ======================================== */
+    
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    
+    @media (min-width: 768px) {
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #c4c4c4;
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #a1a1a1;
+    }
+    
+    /* Dark mode scrollbar */
+    .dark ::-webkit-scrollbar-track {
+      background: #1a1a1a;
+    }
+    
+    .dark ::-webkit-scrollbar-thumb {
+      background: #4B5563;
+      border: 1px solid #374151;
+    }
+    
+    .dark ::-webkit-scrollbar-thumb:hover {
+      background: #6B7280;
+    }
+
+    /* ========================================
+       FORM INPUT STYLES
+       ======================================== */
+    
+    .input-style {
+      margin-top: 0.25rem;
+      display: block;
+      width: 100%;
+      padding: 0.75rem 0.875rem;
+      border: 1px solid #E5E7EB;
+      border-radius: 0.5rem;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+      background-color: #ffffff;
+      color: #1f2937;
+      outline: none;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      min-height: 44px; /* Touch-friendly minimum height */
+    }
+    
+    .input-style::placeholder {
+      color: #9ca3af;
+    }
+    
+    .input-style:focus {
+      border-color: #059669;
+      box-shadow: 
+        0 1px 3px 0 rgba(0, 0, 0, 0.1),
+        0 0 0 3px rgba(5, 150, 105, 0.1);
+      transform: translateY(-1px);
+    }
+    
+    .input-style:hover:not(:focus) {
+      border-color: #D1D5DB;
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+    }
+
+    /* Mobile input adjustments */
+    @media (max-width: 767px) {
+      .input-style {
+        padding: 1rem;
+        font-size: 1rem; /* Prevent zoom on iOS */
+        min-height: 48px; /* Larger touch target */
+        border-radius: 0.5rem;
+      }
+    }
+    
+    /* Tablet input adjustments */
+    @media (min-width: 768px) and (max-width: 1023px) {
+      .input-style {
+        padding: 0.875rem 1rem;
+        font-size: 0.9375rem;
+        min-height: 46px;
+      }
+    }
+
+    /* Dark mode input styles */
+    .dark .input-style {
+      background: #1A1A1A;
+      border: 1px solid #4B5563;
+      color: #E5E5E5;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    }
+    
+    .dark .input-style::placeholder {
+      color: #A1A1A1;
+    }
+    
+    .dark .input-style:focus {
+      border-color: #059669;
+      box-shadow: 
+        0 1px 3px 0 rgba(0, 0, 0, 0.2),
+        0 0 0 3px rgba(5, 150, 105, 0.15);
+      background: #1A1A1A;
+    }
+    
+    .dark .input-style:hover:not(:focus) {
+      border-color: #6B7280;
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+      background: #202020;
+    }
+
+    /* Input type specific styles */
+    .input-style[type="date"], 
+    .input-style[type="time"] {
+      appearance: none;
+    }
+
+    /* Select styling */
+    select.input-style {
+      padding-right: 2.5rem;
+      cursor: pointer;
+    }
+    
+    @media (max-width: 767px) {
+      select.input-style {
+        background-position: right 1rem center;
+        background-size: 1.5rem 1.5rem;
+      }
+    }
+
+    /* Dark mode select styles */
+    .dark select.input-style {
+      color-scheme: dark;
+    }
+
+    .dark select.input-style option {
+      background-color: #1a1a1a !important;
+      color: #e5e5e5 !important;
+      border: none;
+      padding: 8px 12px;
+    }
+
+    .dark select.input-style option:hover,
+    .dark select.input-style option:focus,
+    .dark select.input-style option:checked {
+      background-color: #059669 !important;
+      color: #ffffff !important;
+    }
+
+    .dark select.input-style::-webkit-calendar-picker-indicator {
+      filter: invert(0.8);
+    }
+
+    /* ========================================
+       CONTENTEDITABLE PLACEHOLDER
+       ======================================== */
+    
+    [contenteditable][data-placeholder]:empty::before {
+      content: attr(data-placeholder);
+      color: #9ca3af;
+      pointer-events: none;
+      display: block;
+    }
+    
+    .dark [contenteditable][data-placeholder]:empty::before {
+      color: #a1a1a1;
+    }
+
+    /* ========================================
+       CALENDAR STYLES
+       ======================================== */
+    
+    /* Calendar highlight states */
+    .calendar-today {
+      background-color: #059669 !important;
+      color: #FFFFFF !important;
+      font-weight: 700;
+      border-radius: 0.375rem;
+      box-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);
+    }
+    
+    .calendar-selected {
+      background-color: #047857 !important;
+      color: #FFFFFF !important;
+      border-radius: 0.375rem;
+      box-shadow: 0 2px 4px rgba(4, 120, 87, 0.2);
+    }
+
+    /* Dark mode calendar highlights (same as light) */
+    .dark .calendar-today {
+      background-color: #059669 !important;
+      color: #FFFFFF !important;
+      font-weight: 700;
+      border-radius: 0.375rem;
+      box-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);
+    }
+    
+    .dark .calendar-selected {
+      background-color: #047857 !important;
+      color: #FFFFFF !important;
+      border-radius: 0.375rem;
+      box-shadow: 0 2px 4px rgba(4, 120, 87, 0.2);
+    }
+
+    /* Dark mode calendar structure - remove forced backgrounds */
+    .dark .calendar-grid,
+    .dark .calendar-month,
+    .dark .calendar-year,
+    .dark .calendar-nav,
+    .dark .calendar-header {
+      color: #E5E5E5 !important;
+      border-color: #4B5563 !important;
+    }
+
+    /* Dark mode calendar days - remove forced transparent backgrounds */
+    .dark .calendar-day,
+    .dark .calendar-date,
+    .dark .calendar-cell,
+    .dark [role="gridcell"] {
+      color: #E5E5E5 !important;
+      border-color: #4B5563 !important;
+    }
+
+    /* Dark mode calendar weekday headers */
+    .dark .calendar-weekdays,
+    .dark .calendar-weekday,
+    .dark .calendar-header-cell,
+    .dark th {
+      color: #9CA3AF !important;
+      background-color: #252525 !important;
+      font-weight: 500;
+    }
+
+    /* Dark mode calendar navigation */
+    .dark .calendar-nav button,
+    .dark .calendar-nav span,
+    .dark .calendar-title,
+    .dark .calendar-month-nav,
+    .dark .calendar-year-nav {
+      color: #E5E5E5 !important;
+      background-color: #252525 !important;
+      border-color: #4B5563 !important;
+    }
+
+    /* Calendar hover states - only for actual calendar elements */
+    .calendar-day:hover,
+    .calendar-date:hover,
+    .calendar-cell:hover,
+    [data-calendar-day]:hover,
+    [data-calendar-date]:hover {
+      background-color: rgba(5, 150, 105, 0.05) !important;
+      color: #1F2937 !important;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(5, 150, 105, 0.1);
+      border-radius: 0.375rem;
+    }
+
+    .dark .calendar-day:hover,
+    .dark .calendar-date:hover,
+    .dark .calendar-cell:hover,
+    .dark [data-calendar-day]:hover,
+    .dark [data-calendar-date]:hover {
+      background-color: rgba(5, 150, 105, 0.1) !important;
+      color: #E5E5E5 !important;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(5, 150, 105, 0.15);
+      border-radius: 0.375rem;
+    }
+
+    /* Calendar disabled and outside dates */
+    .dark .calendar-disabled {
+      color: #6B7280 !important;
+      opacity: 0.5;
+    }
+    
+    .dark .calendar-outside {
+      color: #737373 !important;
+    }
+
+    .dark .calendar-muted {
+      color: #9CA3AF !important;
+    }
+
+    .dark .calendar-container,
+    .dark .calendar-wrapper {
+      background-color: #1A1A1A !important;
+      border-color: #4B5563 !important;
+    }
+
+    /* Calendar navigation arrows */
+    .calendar-nav-prev,
+    .calendar-nav-next {
+      background-color: #FFFFFF;
+      border: 1px solid #E5E7EB;
+      color: #6B7280;
+      border-radius: 0.375rem;
+      padding: 0.5rem;
+    }
+
+    .dark .calendar-nav-prev,
+    .dark .calendar-nav-next {
+      background-color: #252525;
+      border: 1px solid #4B5563;
+      color: #9CA3AF;
+    }
+
+    .calendar-nav-prev:hover,
+    .calendar-nav-next:hover {
+      background-color: #F9FAFB;
+      border-color: #D1D5DB;
+      color: #374151;
+    }
+
+    .dark .calendar-nav-prev:hover,
+    .dark .calendar-nav-next:hover {
+      background-color: #1A1A1A;
+      border-color: #6B7280;
+      color: #E5E5E5;
+    }
+
+    /* Calendar month/year selectors */
+    .calendar-month-select,
+    .calendar-year-select {
+      background-color: #FFFFFF;
+      color: #1F2937;
+      border: 1px solid #E5E7EB;
+      border-radius: 0.375rem;
+    }
+
+    .dark .calendar-month-select,
+    .dark .calendar-year-select {
+      background-color: #252525;
+      color: #E5E5E5;
+      border: 1px solid #4B5563;
+    }
+
+    /* ========================================
+       BUTTON STYLES
+       ======================================== */
+    
+    /* General button hover effects - more specific to avoid affecting all buttons */
+    button.calendar-button:hover,
+    button[role="button"]:hover,
+    .hover-effect:hover {
+      background-color: rgba(5, 150, 105, 0.05) !important;
+      color: #1F2937 !important;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.1);
+    }
+
+    .dark button.calendar-button:hover,
+    .dark button[role="button"]:hover,
+    .dark .hover-effect:hover {
+      background-color: rgba(5, 150, 105, 0.1) !important;
+      color: #E5E5E5 !important;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.15);
+    }
+
+    /* Primary button states */
+    .bg-primary,
+    .bg-emerald-600,
+    .bg-green-600,
+    button.active,
+    button[aria-selected="true"],
+    button[data-selected="true"] {
+      background-color: #059669 !important;
+      color: #FFFFFF !important;
+      border-color: #059669 !important;
+    }
+
+    .dark .bg-primary,
+    .dark .bg-emerald-600,
+    .dark .bg-green-600,
+    .dark button.active,
+    .dark button[aria-selected="true"],
+    .dark button[data-selected="true"] {
+      background-color: #059669 !important;
+      color: #FFFFFF !important;
+      border-color: #059669 !important;
+    }
+
+    /* Primary button hover states */
+    .dark .bg-primary:not(.bg-surface):not(.bg-gray-200),
+    .dark .bg-emerald-600:not(.bg-surface):not(.bg-gray-200),
+    .dark .bg-green-600:not(.bg-surface):not(.bg-gray-200) {
+      background-color: #059669 !important;
+      color: #FFFFFF !important;
+      border-color: #059669 !important;
+    }
+    
+    .dark .bg-primary:not(.bg-surface):not(.bg-gray-200):hover,
+    .dark .bg-emerald-600:not(.bg-surface):not(.bg-gray-200):hover,
+    .dark .bg-green-600:not(.bg-surface):not(.bg-gray-200):hover {
+      background-color: #047857 !important;
+      border-color: #047857 !important;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25) !important;
+    }
+
+    /* Inactive/Default buttons - only for buttons with explicit background classes */
+    .dark button.bg-surface,
+    .dark button.bg-gray-200,
+    .dark .bg-surface,
+    .dark .bg-gray-200 {
+      background-color: #252525 !important;
+      color: #A1A1A1 !important;
+      border-color: #4B5563 !important;
+    }
+
+    .dark button.bg-surface:hover,
+    .dark button.bg-gray-200:hover,
+    .dark .bg-surface:hover,
+    .dark .bg-gray-200:hover {
+      background-color: #1A1A1A !important;
+      color: #E5E5E5 !important;
+      border-color: #6B7280 !important;
+    }
+
+    /* ========================================
+       THEME TOGGLE BUTTON
+       ======================================== */
+    
+    .theme-toggle-button {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      min-height: 40px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #E5E7EB;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      color: #6B7280;
+      font-size: 18px;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      position: relative;
+      flex-shrink: 0;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    .theme-toggle-button:hover {
+      background: rgba(255, 255, 255, 1);
+      border-color: #D1D5DB;
+      color: #4B5563;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .theme-toggle-button:active {
+      transform: translateY(0);
+    }
+
+    .theme-toggle-button:focus-visible {
+      outline: 2px solid #059669;
+      outline-offset: 2px;
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 640px) {
+      .theme-toggle-button {
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        min-height: 32px;
+        font-size: 14px;
+        margin-left: 8px;
+      }
+    }
+
+    /* Dark mode theme toggle */
+    .dark .theme-toggle-button {
+      background: rgba(37, 37, 37, 0.9);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+      border: 1px solid #4B5563;
+      color: #A1A1A1;
+    }
+
+    .dark .theme-toggle-button:hover {
+      background: rgba(37, 37, 37, 1);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+      border-color: #6B7280;
+      color: #E5E5E5;
+      transform: translateY(-1px);
+    }
+
+    /* Theme toggle icon animation */
+    .theme-toggle-button svg {
+      transition: transform 0.3s ease-in-out;
+      width: 18px;
+      height: 18px;
+    }
+
+    @media (max-width: 640px) {
+      .theme-toggle-button svg {
+        width: 14px;
+        height: 14px;
+      }
+    }
+
+    .theme-toggle-button:hover svg {
+      transform: rotate(180deg);
+    }
+
+    /* Theme toggle tooltip */
+    .theme-toggle-button::before {
+      content: attr(data-tooltip);
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%) scale(0.95);
+      background: #1F2937;
+      color: #FFFFFF;
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s ease-in-out;
+      pointer-events: none;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+    }
+
+    .theme-toggle-button:hover::before {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) scale(1);
+    }
+
+    /* Light mode tooltip */
+    html:not(.dark) .theme-toggle-button::before {
+      background: #FFFFFF;
+      color: #1F2937;
+      border: 1px solid #E5E7EB;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Hide tooltip on touch devices */
+    @media (hover: none) and (pointer: coarse) {
+      .theme-toggle-button::before {
+        display: none;
+      }
+    }
+
+    /* ========================================
+       QUILL EDITOR STYLES
+       ======================================== */
+    
+    .ql-toolbar.ql-snow {
+      flex-shrink: 0;
+      border: 1px solid #E5E7EB;
+      border-bottom: 0;
+      border-radius: 0.5rem 0.5rem 0 0;
+      background-color: #F9FAFB;
+      padding: 8px;
+    }
+
+    .ql-container.ql-snow {
+      flex-grow: 1;
+      overflow-y: auto;
+      border: 1px solid #E5E7EB;
+      border-radius: 0 0 0.5rem 0.5rem;
+    }
+    
+    .ql-editor {
+      min-height: 250px;
+      font-size: 1rem;
+      line-height: 1.6;
+      height: auto;
+      padding: 1rem 1.25rem !important;
+      color: #1F2937;
+    }
+    
+    .ql-editor.ql-blank::before {
+      color: #9ca3af;
+      font-style: italic;
+      left: 1.25rem !important;
+      top: 1rem !important;
+    }
+
+    /* Dark mode Quill */
+    .dark .ql-toolbar.ql-snow {
+      background-color: #252525;
+      border-color: #4B5563;
+    }
+    
+    .dark .ql-container.ql-snow {
+      background-color: #1A1A1A;
+      border-color: #4B5563;
+    }
+    
+    .dark .ql-editor {
+      color: #E5E5E5;
+    }
+    
+    .dark .ql-editor.ql-blank::before {
+      color: #A1A1A1;
+    }
+
+    /* Quill toolbar formatting */
+    .ql-toolbar.ql-snow .ql-formats {
+      margin-right: 15px;
+    }
+    
+    .ql-toolbar.ql-snow .ql-formats:last-child {
+      margin-right: 0;
+    }
+
+    /* Quill active states */
+    .ql-snow .ql-formats button.ql-active {
+      background-color: rgba(5, 150, 105, 0.1);
+    }
+    
+    .dark .ql-snow .ql-formats button.ql-active {
+      background-color: rgba(5, 150, 105, 0.2);
+    }
+
+    /* Quill icon sizing */
+    .ql-toolbar.ql-snow .ql-formats button svg,
+    .ql-toolbar.ql-snow .ql-picker-label svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .ql-toolbar.ql-snow .ql-stroke {
+      stroke-width: 1.5;
+    }
+    
+    .ql-toolbar.ql-snow .ql-thin-stroke {
+      stroke-width: 1;
+    }
+
+    /* Dark mode Quill colors */
+    .dark .ql-stroke { 
+      stroke: #A1A1A1; 
+    }
+    
+    .dark .ql-fill { 
+      fill: #A1A1A1; 
+    }
+    
+    .dark .ql-picker-label { 
+      color: #E5E5E5; 
+    }
+    
+    .dark .ql-snow .ql-formats button:hover .ql-stroke,
+    .dark .ql-snow .ql-picker-label:hover .ql-stroke {
+      stroke: #FFFFFF;
+    }
+    
+    .dark .ql-snow .ql-formats button.ql-active .ql-stroke,
+    .dark .ql-snow .ql-picker-label.ql-active .ql-stroke {
+      stroke: #059669;
+    }
+    
+    .dark .ql-snow .ql-formats button.ql-active,
+    .dark .ql-snow .ql-picker-label.ql-active {
+      background-color: rgba(5, 150, 105, 0.2);
+    }
+
+    /* Quill dropdown panel */
+    .dark .ql-snow .ql-picker-options {
+      background-color: #252525;
+      border-color: #4B5563;
+      color: #E5E5E5;
+    }
+    
+    .dark .ql-snow .ql-picker-item:hover,
+    .dark .ql-snow .ql-picker-item.ql-selected {
+      color: #059669;
+      background-color: #1A1A1A;
+    }
+    
+    .dark .ql-snow .ql-picker-item.ql-selected {
+      font-weight: 600;
+    }
+
+    /* ========================================
+       UTILITY CLASSES
+       ======================================== */
+    
+    /* Selection colors */
+    .dark ::selection {
+      background-color: rgba(5, 150, 105, 0.25);
+      color: #e5e5e5;
+    }
+    
+    .dark ::-moz-selection {
+      background-color: rgba(5, 150, 105, 0.25);
+      color: #e5e5e5;
+    }
+
+    /* Glow effects */
+    .glow-primary {
+      box-shadow: 0 0 20px rgba(5, 150, 105, 0.1);
+    }
+    
+    .glow-primary:hover {
+      box-shadow: 0 0 30px rgba(5, 150, 105, 0.2);
+    }
+    
+    .dark .glow-primary {
+      box-shadow: 0 0 20px rgba(5, 150, 105, 0.15);
+    }
+    
+    .dark .glow-primary:hover {
+      box-shadow: 0 0 30px rgba(5, 150, 105, 0.25);
+    }
+
+    /* Dark mode text color fixes */
+    .dark .text-muted-foreground,
+    .dark .text-gray-500,
+    .dark .text-gray-400,
+    .dark .text-slate-500,
+    .dark .text-slate-400 {
+      color: #A1A1A1 !important;
+    }
+    
+    .dark .text-foreground,
+    .dark .text-gray-900,
+    .dark .text-black,
+    .dark .text-slate-900 {
+      color: #E5E5E5 !important;
+    }
+    
+    .dark [class*="calendar"] {
+      color: #E5E5E5 !important;
+    }
+    
+    .dark [class*="calendar"][class*="muted"] {
+      color: #A1A1A1 !important;
+    }
+    
+    .dark [class*="day"],
+    .dark [class*="date"],
+    .dark [class*="month"],
+    .dark [class*="year"] {
+      color: #E5E5E5 !important;
+    }
+    
+    .dark [aria-label*="Previous"],
+    .dark [aria-label*="Next"],
+    .dark [aria-label*="navigation"],
+    .dark .calendar-nav-button {
+      color: #E5E5E5 !important;
+      background-color: rgba(37, 37, 37, 0.8) !important;
+      border: 1px solid #4B5563 !important;
+    }
+    
+    .dark [aria-label*="Previous"]:hover,
+    .dark [aria-label*="Next"]:hover,
+    .dark .calendar-nav-button:hover {
+      background-color: rgba(5, 150, 105, 0.2) !important;
+      border-color: #059669 !important;
+    }
+
+    /* ========================================
+       MOBILE DRAG & DROP
+       ======================================== */
+    
+    .dragging-active {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .mobile-drag-item {
+      transition: transform 0.1s ease-out; 
+      will-change: transform; 
+    }
+
+    .mobile-drag-active [data-drop-zone="true"] {
+      border: 2px dashed #059669 !important;
+      background-color: rgba(5, 150, 105, 0.1) !important;
+    }
+    
+    .dark .mobile-drag-active [data-drop-zone="true"] {
+      border: 2px dashed #059669 !important;
+      background-color: rgba(5, 150, 105, 0.2) !important;
+    }
+
+    /* ========================================
+       TRANSITIONS & ANIMATIONS
+       ======================================== */
+    
+    /* Selective transitions for theme switching */
+    body, 
+    .input-style, 
+    .theme-toggle-button, 
+    .ql-toolbar, 
+    .ql-container, 
+    .ql-editor {
+      transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                  border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                  color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                  box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    /* Interactive element transitions */
+    button, 
+    [role="button"], 
+    .calendar-button {
+      transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                  border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                  color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                  box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ========================================
+       ACCESSIBILITY & RESPONSIVE
+       ======================================== */
+    
+    /* Chat bubble styles */
+    .chat-bubble-sent::after {
+      content: '';
+      position: absolute;
+      top: 8px;
+      right: -8px;
+      width: 0;
+      height: 0;
+      border-left: 8px solid rgb(59, 130, 246); /* Blue color for sent messages */
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+    }
+
+    .chat-bubble-received::after {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: -8px;
+      width: 0;
+      height: 0;
+      border-right: 8px solid rgb(255, 255, 255); /* White for light mode */
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+    }
+
+    /* Dark mode support for received message bubbles */
+    .dark .chat-bubble-received::after {
+      border-right-color: rgb(55, 65, 81); /* Dark gray for dark mode */
+    }
+
+    /* Smooth animations for message bubbles */
+    .group {
+      transition: all 0.2s ease-in-out;
+    }
+
+    .group:hover {
+      transform: translateY(-1px);
+    }
+
+    /* Custom scrollbar for better UX */
+    .scrollbar-thin::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+
+    .scrollbar-thin::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+      background-color: rgba(156, 163, 175, 0.5);
+      border-radius: 2px;
+    }
+
+    .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(156, 163, 175, 0.7);
+    }
+
+    .dark .scrollbar-thin::-webkit-scrollbar-thumb {
+      background-color: rgba(75, 85, 99, 0.5);
+    }
+
+    .dark .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(75, 85, 99, 0.7);
+    }
+
+    /* Hide scrollbar arrows */
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Typing indicator animation */
+    @keyframes bounce {
+      0%, 80%, 100% {
+        transform: scale(0);
+      }
+      40% {
+        transform: scale(1);
+      }
+    }
+
+    .animate-bounce {
+      animation: bounce 1.4s infinite ease-in-out both;
+    }
+
+    /* Auto-expanding textarea */
+    .resize-none {
+      resize: none;
+    }
+
+    /* Emoji picker styling */
+    .emoji-picker {
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Message hover effects */
+    .message-group:hover .timestamp {
+      opacity: 1;
+    }
+
+    .timestamp {
+      opacity: 0;
+      transition: opacity 0.2s ease-in-out;
+    }
+
+    /* Online status pulse animation */
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+      }
+    }
+
+    .online-indicator {
+      animation: pulse 2s infinite;
+    }
+
+    /* Connection card hover effects */
+    .connection-card {
+      transition: all 0.2s ease-in-out;
+    }
+
+    .connection-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .dark .connection-card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* High contrast mode support */
+    @media (prefers-contrast: high) {
+      .theme-toggle-button {
+        border: 2px solid currentColor;
+      }
+      
+      .dark .theme-toggle-button {
+        border: 2px solid #e5e5e5;
+      }
+    }
+    
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+      .theme-toggle-button,
+      .theme-toggle-button svg,
+      .theme-toggle-button::before,
+      * {
+        transition-duration: 0.001s !important;
+        transition-delay: 0s !important;
+        animation-duration: 0.001s !important;
+        animation-delay: 0s !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+/* ========================================
+   STREAM CHAT STYLES (MERGED & UPDATED)
+   ======================================== */
+
+/* Basic variables for consistency. These are placeholders and will be overridden by the theme. */
+:root {
+  --str-chat__font-family: 'Inter', system-ui, sans-serif;
+  --str-chat__border-radius-circle: 50%;
+  --str-chat__border-radius-inner: 0.5rem;
+  --str-chat__border-radius-outer: 0.75rem;
+}
+
+/* Enhanced Light mode variables with better contrast */
+html:not(.dark) {
+  --str-chat__primary-color: #059669; /* primary-DEFAULT */
+  --str-chat__active-primary-color: #047857; /* primary-dark */
+  --str-chat__surface-color: #FFFFFF; /* card-DEFAULT */
+  --str-chat__secondary-surface-color: #F3F4F6; /* surface-DEFAULT */
+  --str-chat__primary-surface-color: #F9FAFB; /* background-DEFAULT */
+  --str-chat__primary-surface-color-low-emphasis: #F3F4F6;
+  --str-chat__text-color: #1F2937; /* text-DEFAULT */
+  --str-chat__text-color-secondary: #6B7280; /* muted-DEFAULT */
+  --str-chat__border-color: #E5E7EB; /* border-DEFAULT */
+  --str-chat__input-color: #FFFFFF;
+  --str-chat__message-bg-own: #dcf8c6; /* WhatsApp green for sent messages */
+  --str-chat__message-bg-other: #FFFFFF; /* White for received messages */
+}
+
+/* Enhanced Dark mode variables with proper theming */
+.dark {
+  --str-chat__primary-color: #059669;
+  --str-chat__active-primary-color: #10B981; /* primary-light for hover */
+  --str-chat__surface-color: #1A1A1A; /* card-dark */
+  --str-chat__secondary-surface-color: #252525; /* surface-dark */
+  --str-chat__primary-surface-color: #0F0F0F; /* background-dark */
+  --str-chat__primary-surface-color-low-emphasis: #252525;
+  --str-chat__text-color: #E5E5E5; /* text-dark */
+  --str-chat__text-color-secondary: #A1A1A1; /* muted-dark */
+  --str-chat__border-color: #4B5563; /* border-dark */
+  --str-chat__input-color: #1A1A1A;
+  --str-chat__message-bg-own: #047857; /* Darker green for sent messages */
+  --str-chat__message-bg-other: #1A1A1A; /* Dark card for received messages */
+}
+
+.str-chat__container {
+  font-family: var(--str-chat__font-family) !important;
+}
+
+/* Channel list styling */
+.str-chat__channel-list {
+  background: var(--str-chat__primary-surface-color) !important;
+  border-right: 1px solid var(--str-chat__border-color) !important;
+}
+
+/* Channel preview styling (like Telegram/WhatsApp) */
+.str-chat__channel-preview-messenger {
+    padding: 0.75rem 1rem !important;
+    border-bottom: 1px solid var(--str-chat__border-color) !important;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.str-chat__channel-preview-messenger:hover {
+  background-color: var(--str-chat__secondary-surface-color) !important;
+}
+
+.str-chat__channel-preview--active,
+.str-chat__channel-preview--active:hover {
+  background-color: var(--str-chat__primary-color) !important;
+  color: white !important;
+}
+
+.str-chat__channel-preview--active .str-chat__channel-preview-last-message,
+.str-chat__channel-preview--active .str-chat__channel-preview-last-message-by,
+.str-chat__channel-preview--active .str-chat__channel-preview-timestamp {
+    color: rgba(255,255,255,0.8) !important;
+}
+
+ .str-chat__channel-preview--active .str-chat__channel-preview-title {
+    color: white !important;
+}
+
+/* Channel preview styling remains the same - handled by chat-theme.css */
+
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Prata&display=swap" rel="stylesheet">
+  <link 
+      rel="stylesheet" 
+      href="https://cdn.jsdelivr.net/npm/stream-chat-react@11/dist/css/v2/index.css"
+    >
+  <link rel="stylesheet" href="/chat-theme.css">
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "recharts": "https://esm.sh/recharts@^2.15.3",
+    "react-router-dom": "https://esm.sh/react-router-dom@^7.6.1",
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@^2.49.8",
+    "framer-motion": "https://esm.sh/framer-motion@^12.15.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.525.0",
+    "stream-chat": "https://esm.sh/stream-chat@^8.36.0",
+    "stream-chat-react": "https://esm.sh/stream-chat-react@^11.23.1",
+    "@stream-io/video-react-sdk": "https://esm.sh/@stream-io/video-react-sdk@^1.3.3",
+    "date-fns": "https://esm.sh/date-fns@^3.6.0",
+    "express": "https://esm.sh/express@^5.1.0",
+    "cors": "https://esm.sh/cors@^2.8.5",
+    "@stream-io/video-client": "https://esm.sh/@stream-io/video-client@^1.2.0",
+    "stream-chat-react/": "https://esm.sh/stream-chat-react@^13.2.3/",
+    "emoji-mart": "https://esm.sh/emoji-mart@^5.5.2",
+    "@emoji-mart/data": "https://esm.sh/@emoji-mart/data@^1.1.2",
+    "@emoji-mart/react": "https://esm.sh/@emoji-mart/react@^1.1.1"
+  }
+}
+</script>
+  <script>
+    // Note: API keys are now securely stored in environment variables
+    // No sensitive data exposed in HTML anymore
+
+    // Enhanced theme setup with responsive considerations
+    (function() {
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      
+      if (savedTheme) {
+        document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+      } else if (prefersDark) {
+        document.documentElement.classList.add('dark');
+      }
+      
+      // Handle viewport height changes on mobile (address bar hiding/showing)
+      function setViewportHeight() {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+      }
+      
+      setViewportHeight();
+      window.addEventListener('resize', setViewportHeight);
+      window.addEventListener('orientationchange', () => {
+        setTimeout(setViewportHeight, 100);
+      });
+    })();
+
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+      if (!localStorage.getItem('theme')) {
+        document.documentElement.classList.toggle('dark', e.matches);
+      }
+    });
+    
+    // Prevent zoom on double-tap for iOS
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function (event) {
+      const now = (new Date()).getTime();
+      if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+      }
+      lastTouchEnd = now;
+    }, false);
+    
+    // Handle orientation changes
+    window.addEventListener('orientationchange', function() {
+      // Force a reflow to handle iOS safari bugs
+      document.documentElement.style.height = 'initial';
+      setTimeout(() => {
+        document.documentElement.style.height = '';
+      }, 500);
+    });
+  </script>
+</head>
+<body class="bg-background dark:bg-background-dark text-text dark:text-text-dark min-h-screen-mobile md:min-h-screen">
+  <div id="root" class="min-h-screen-mobile md:min-h-screen w-full"></div>
+  <!-- Quill JS -->
+  <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+  <script type="module" src="./index.tsx"></script>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
