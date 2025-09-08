@@ -966,7 +966,7 @@ export const TasksPage: React.FC<TasksPageProps> = ({ appTasks, setAppTasks, app
                     {task.tags[0]}
                   </span>
                 ) : (
-                  <span className="text-muted-dark">-</span>
+                  <span className="text-muted dark:text-muted-dark">-</span>
                 )}
               </div>
               
@@ -1085,8 +1085,8 @@ export const TasksPage: React.FC<TasksPageProps> = ({ appTasks, setAppTasks, app
         </div>
 
         {/* Timeline View */}
-        <div className="bg-card dark:bg-card-dark rounded-lg border border-border dark:border-border-dark overflow-x-auto">
-          <div className="min-w-[800px]">
+        <div className="bg-card dark:bg-card-dark rounded-lg border border-border dark:border-border-dark">
+          <div className="min-w-[800px] overflow-x-auto" style={{scrollbarWidth: 'thin', scrollbarColor: '#cbd5e0 #f7fafc'}}>
             {/* Timeline Header */}
             <div className="sticky top-0 z-10 bg-card dark:bg-card-dark">
               <div className="grid grid-cols-[200px_1fr] gap-0">
@@ -1465,7 +1465,7 @@ export const TasksPage: React.FC<TasksPageProps> = ({ appTasks, setAppTasks, app
                   </select>
                 ) : (
                   <div className="relative">
-                    <div className="input-style min-h-[42px] max-h-48 overflow-y-auto p-2 space-y-1">
+                    <div className="input-style min-h-[42px] max-h-48 overflow-y-auto p-2 space-y-1" style={{scrollbarWidth: 'thin', scrollbarColor: '#cbd5e0 #f7fafc'}}>
                       <label className="flex items-center space-x-2 p-1 hover:bg-surface dark:hover:bg-surface-dark rounded cursor-pointer">
                         <input
                           type="checkbox"
