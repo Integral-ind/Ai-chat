@@ -173,18 +173,18 @@ const QuickActionItem: React.FC<{
     <button
         onClick={onClick}
         disabled={disabled}
-        className={`flex flex-col items-center justify-center p-4 space-y-2 bg-gray-50 dark:bg-surface-dark rounded-xl transition-colors duration-150 ${
+        className={`flex flex-col items-center justify-center p-6 space-y-3 bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 transition-all duration-200 ${
             disabled 
                 ? 'opacity-50 cursor-not-allowed' 
-                : 'hover:bg-gray-100 dark:hover:bg-gray-700/80 cursor-pointer'
+                : 'hover:bg-gray-50 dark:hover:bg-gray-700 hover:shadow-md hover:-translate-y-0.5 cursor-pointer'
         }`}
     >
-        <div className={`p-2 bg-gray-200 dark:bg-gray-700 rounded-full ${
+        <div className={`p-3 bg-gray-100 dark:bg-gray-600 rounded-full ${
             disabled ? 'text-gray-400' : 'text-primary dark:text-indigo-400'
         }`}>
             {icon}
         </div>
-        <p className={`text-xs font-medium ${
+        <p className={`text-sm font-medium ${
             disabled ? 'text-gray-400' : 'text-text dark:text-text-dark'
         }`}>
             {label}
@@ -578,180 +578,88 @@ export const DashboardPage: React.FC<{
     const hasFocusItems = todaysFocusTasks.length > 0 || sortedTodaysEvents.length > 0;
 
     return (
-        <div className="p-4 sm:p-6 space-y-6 bg-background dark:bg-background-dark">
-            {/* Header */}
-            <div className="flex justify-between items-start">
-                <div>
-                    <h1 className="text-[2.125rem] font-display font-normal text-text dark:text-text-dark">{greeting}, {userName}! {isGoodNight ? '😴' : '✏️'}</h1>
-                    <p className="text-muted dark:text-muted-dark mt-1">Ready to make {isGoodNight ? 'tomorrow' : 'today'} productive? You have {pendingTasksCount} tasks pending.</p>
+        <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-background dark:bg-background-dark">
+            {/* Centered Content Container */}
+            <div className="w-full max-w-2xl space-y-8">
+                
+                {/* Centered Greeting */}
+                <div className="text-center space-y-2">
+                    <h1 className="text-4xl sm:text-5xl font-display font-normal text-text dark:text-text-dark">
+                        {greeting}, {userName}! {isGoodNight ? '😴' : '✏️'}
+                    </h1>
+                    <p className="text-lg text-muted dark:text-muted-dark">
+                        Ready to make {isGoodNight ? 'tomorrow' : 'today'} productive?
+                    </p>
                 </div>
-                <div className="text-right flex-shrink-0">
-                    <p className="text-3xl font-semibold text-text dark:text-text-dark">{formattedTime}</p>
-                    <p className="text-sm text-muted dark:text-muted-dark">{formattedDate}</p>
-                </div>
-            </div>
 
-            {/* Stat Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {statCards.map(stat => <StatCard key={stat.title} {...stat} />)}
-            </div>
-
-            {/* AI Insights */}
-            <Card className="p-6">
-                <div className="flex items-center mb-4">
-                    <SparklesIcon className="w-6 h-6 text-primary dark:text-indigo-300 mr-2" />
-                    <h3 className="text-lg font-semibold text-text dark:text-text-dark">AI Insights & Recommendations</h3>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {insights.map((insight, index) => (
-                        <Card key={index} className={`p-4 border-l-4 border-${insight.color}-500 bg-${insight.color}-50 dark:bg-${insight.color}-900/20`}>
-                            <div className="flex items-start">
-                                <div className="flex-shrink-0">
-                                    {insight.type === 'danger' && (
-                                        <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                                        </svg>
-                                    )}
-                                    {insight.type === 'success' && (
-                                        <svg className="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                                        </svg>
-                                    )}
-                                    {insight.type === 'warning' && (
-                                        <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                                        </svg>
-                                    )}
-                                    {insight.type === 'info' && (
-                                        <svg className="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                                        </svg>
-                                    )}
-                                </div>
-                                <div className="ml-3">
-                                    <p className={`text-sm font-medium text-${insight.color}-800 dark:text-${insight.color}-200`}>
-                                        {insight.title}
-                                    </p>
-                                    <p className={`text-xs text-${insight.color}-600 dark:text-${insight.color}-300 mt-1`}>
-                                        {insight.message}
-                                    </p>
-                                </div>
-                            </div>
-                        </Card>
-                    ))}
-                </div>
-            </Card>
-
-            {/* Main Content */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <Card className="lg:col-span-2 p-6">
-                    <h3 className="text-lg font-semibold mb-3 text-text dark:text-text-dark">Today's Focus</h3>
-                    {hasFocusItems ? (
-                        <div className="space-y-0">
-                            {/* Show today's tasks */}
-                            {todaysFocusTasks.map(task => (
-                                <TodayFocusTaskItem key={task.id} task={task} onToggleComplete={handleToggleTaskComplete} />
-                            ))}
-                            
-                            {/* Show today's events */}
-                            {isLoadingEvents && (
-                                <div className="py-3 border-b border-gray-100 dark:border-border-dark/50 last:border-b-0">
-                                    <p className="text-sm text-muted dark:text-muted-dark">Loading today's events...</p>
-                                </div>
-                            )}
-                            
-                            {!isLoadingEvents && sortedTodaysEvents.map(event => (
-                                <TodayFocusEventItem key={event.id} event={event} />
-                            ))}
-                            
-                            {/* Show "View all" links if there are more items */}
-                            {(todaysFocusTasks.length >= 3 || sortedTodaysEvents.length >= 2) && (
-                                <div className="pt-3 flex justify-between text-xs">
-                                    {todaysFocusTasks.length >= 3 && (
-                                        <button 
-                                            onClick={() => navigate('/app/tasks')}
-                                            className="text-primary hover:text-primary-dark dark:text-indigo-400 dark:hover:text-indigo-300"
-                                        >
-                                            View all tasks →
-                                        </button>
-                                    )}
-                                    {sortedTodaysEvents.length >= 2 && (
-                                        <button 
-                                            onClick={() => navigate('/app/calendar')}
-                                            className="text-primary hover:text-primary-dark dark:text-indigo-400 dark:hover:text-indigo-300"
-                                        >
-                                            View calendar →
-                                        </button>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                    ) : (
-                        <p className="text-sm text-muted dark:text-muted-dark text-center py-8">
-                            {isLoadingEvents 
-                                ? "Loading today's schedule..." 
-                                : "No tasks or events for today. Enjoy your day or add new items!"
-                            }
-                        </p>
-                    )}
-                </Card>
-
-                <div className="space-y-6">
-                    <Card className="p-6">
-                        <h3 className="text-lg font-semibold mb-4 text-text dark:text-text-dark">Quick Actions</h3>
-                        <div className="grid grid-cols-2 gap-4">
-                            <QuickActionItem 
-                                label="New Task" 
-                                icon={<PlusIcon className="w-5 h-5"/>} 
-                                onClick={() => navigate('/app/tasks', { state: { openNewTaskModal: true } })} 
-                            />
-                            <QuickActionItem 
-                                label="New Note" 
-                                icon={<DocumentPlusIcon className="w-5 h-5"/>} 
-                                onClick={handleNewNoteDirect}
-                                disabled={isProcessingNote}
-                            />
-                            <QuickActionItem 
-                                label="New File" 
-                                icon={<UploadCloudIcon className="w-5 h-5"/>} 
-                                onClick={handleNewFileDirect}
-                            />
-                            {isFocusModeActive ? (
-                                <div className="flex flex-col items-center justify-center p-4 space-y-2 bg-primary/20 dark:bg-primary-dark/30 rounded-xl transition-colors duration-150 ring-2 ring-primary animate-pulse">
-                                    <p className="text-2xl font-bold font-mono text-primary dark:text-primary-light">
-                                        {String(Math.floor(timeRemaining / 60)).padStart(2, '0')}:{String(timeRemaining % 60).padStart(2, '0')}
-                                    </p>
-                                    <Button variant="dangerOutline" size="sm" onClick={stopFocusSession} className="!px-3 !py-1 text-xs">
-                                        Stop Focus
-                                    </Button>
-                                </div>
-                            ) : (
-                                <QuickActionItem 
-                                    label="Start Focus" 
-                                    icon={<TargetIcon className="w-5 h-5"/>} 
-                                    onClick={() => startFocusSession()} 
-                                />
-                            )}
-                        </div>
-                        
-                        {/* Hidden file input for direct file upload */}
-                        <input 
-                            type="file" 
-                            ref={fileInputRef} 
-                            onChange={handleFileSelect} 
-                            className="hidden" 
-                            accept="image/*,video/*,application/pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,text/plain,.zip,.rar,.tar,.gz" 
+                {/* AI Search Bar */}
+                <div className="w-full">
+                    <div className="relative">
+                        <input
+                            type="text"
+                            placeholder="Ask AI anything or search your workspace..."
+                            className="w-full px-6 py-4 text-lg rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-text dark:text-text-dark placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-indigo-400 focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md"
+                            onFocus={(e) => {
+                                e.target.style.boxShadow = '0 8px 30px rgba(0,0,0,0.12)';
+                            }}
+                            onBlur={(e) => {
+                                e.target.style.boxShadow = '';
+                            }}
                         />
-                    </Card>
-                    <Card className="p-6">
-                        <h3 className="text-lg font-semibold mb-4 text-text dark:text-text-dark">Project Progress</h3>
-                        {projectsForDashboard.length > 0 ? (
-                            projectsForDashboard.map(proj => <ProjectProgressItem key={proj.id} {...proj} />)
-                        ) : (
-                            <p className="text-sm text-muted dark:text-muted-dark text-center py-4">No active projects.</p>
-                        )}
-                    </Card>
+                        <button className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                            <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
+
+                {/* Quick Actions */}
+                <div className="w-full">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <QuickActionItem 
+                            label="New Task" 
+                            icon={<PlusIcon className="w-6 h-6"/>} 
+                            onClick={() => navigate('/app/tasks', { state: { openNewTaskModal: true } })} 
+                        />
+                        <QuickActionItem 
+                            label="New Note" 
+                            icon={<DocumentPlusIcon className="w-6 h-6"/>} 
+                            onClick={handleNewNoteDirect}
+                            disabled={isProcessingNote}
+                        />
+                        <QuickActionItem 
+                            label="Upload File" 
+                            icon={<UploadCloudIcon className="w-6 h-6"/>} 
+                            onClick={handleNewFileDirect}
+                        />
+                        {isFocusModeActive ? (
+                            <div className="flex flex-col items-center justify-center p-4 space-y-2 bg-primary/20 dark:bg-primary-dark/30 rounded-xl transition-colors duration-150 ring-2 ring-primary animate-pulse">
+                                <p className="text-xl font-bold font-mono text-primary dark:text-primary-light">
+                                    {String(Math.floor(timeRemaining / 60)).padStart(2, '0')}:{String(timeRemaining % 60).padStart(2, '0')}
+                                </p>
+                                <Button variant="dangerOutline" size="sm" onClick={stopFocusSession} className="!px-2 !py-1 text-xs">
+                                    Stop Focus
+                                </Button>
+                            </div>
+                        ) : (
+                            <QuickActionItem 
+                                label="Start Focus" 
+                                icon={<TargetIcon className="w-6 h-6"/>} 
+                                onClick={() => startFocusSession()} 
+                            />
+                        )}
+                    </div>
+                </div>
+
+                {/* Hidden file input for direct file upload */}
+                <input 
+                    type="file" 
+                    ref={fileInputRef} 
+                    onChange={handleFileSelect} 
+                    className="hidden" 
+                    accept="image/*,video/*,application/pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,text/plain,.zip,.rar,.tar,.gz" 
+                />
             </div>
         </div>
     );
