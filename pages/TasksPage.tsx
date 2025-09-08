@@ -79,6 +79,12 @@ export const TasksPage: React.FC<TasksPageProps> = ({ appTasks, setAppTasks, app
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isMultiAssignment, setIsMultiAssignment] = useState(false);
   
+  // Timeline scroll states
+  const timelineRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  
   const [newTaskForm, setNewTaskForm] = useState<TaskFormDialogState>({
     title: '',
     dueDate: new Date().toISOString().split('T')[0],
@@ -1039,10 +1045,6 @@ export const TasksPage: React.FC<TasksPageProps> = ({ appTasks, setAppTasks, app
 
   const renderTimelineView = () => {
     const timelineDays = getTimelineDays(timelineStartDate, 35); // Increased back to 35 days for better scrolling
-    const timelineRef = useRef<HTMLDivElement>(null);
-    const [isDragging, setIsDragging] = useState(false);
-    const [startX, setStartX] = useState(0);
-    const [scrollLeft, setScrollLeft] = useState(0);
     
     // Task colors by priority with better aesthetics
     const taskColors = {
