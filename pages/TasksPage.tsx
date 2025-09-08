@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useCallback, FormEvent, createContext } from 'react';
+import React, { useState, useMemo, useEffect, useCallback, FormEvent, createContext, useRef } from 'react';
 import { Card, Button, Modal, DropZone, useDragAndDrop, ProgressBar, TaskInfoModal } from '../components';
 import { Task, TaskStatus, TaskPriority, Project as ProjectType, User as FrontendUser } from '../types';
 import { PlusIcon, EyeIcon, XMarkIcon, ExclamationTriangleIcon, CheckIcon, CalendarIcon, UserIcon } from '../constants';
@@ -1039,10 +1039,10 @@ export const TasksPage: React.FC<TasksPageProps> = ({ appTasks, setAppTasks, app
 
   const renderTimelineView = () => {
     const timelineDays = getTimelineDays(timelineStartDate, 35); // Increased back to 35 days for better scrolling
-    const timelineRef = React.useRef<HTMLDivElement>(null);
-    const [isDragging, setIsDragging] = React.useState(false);
-    const [startX, setStartX] = React.useState(0);
-    const [scrollLeft, setScrollLeft] = React.useState(0);
+    const timelineRef = useRef<HTMLDivElement>(null);
+    const [isDragging, setIsDragging] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [scrollLeft, setScrollLeft] = useState(0);
     
     // Task colors by priority with better aesthetics
     const taskColors = {
