@@ -582,7 +582,7 @@ export const DashboardPage: React.FC<{
             {/* Header */}
             <div className="flex justify-between items-start">
                 <div>
-                    <h1 className="text-[2.125rem] font-display font-normal text-text dark:text-text-dark">{greeting}, {userName}! {isGoodNight ? '😴' : ✏️'}</h1>
+                    <h1 className="text-[2.125rem] font-display font-normal text-text dark:text-text-dark">{greeting}, {userName}! {isGoodNight ? '😴' : '✏️'}</h1>
                     <p className="text-muted dark:text-muted-dark mt-1">Ready to make {isGoodNight ? 'tomorrow' : 'today'} productive? You have {pendingTasksCount} tasks pending.</p>
                 </div>
                 <div className="text-right flex-shrink-0">
