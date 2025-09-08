@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect, useCallback, FormEvent, createContext, useRef } from 'react';
 import { Card, Button, Modal, DropZone, useDragAndDrop, ProgressBar, TaskInfoModal } from '../components';
 import { Task, TaskStatus, TaskPriority, Project as ProjectType, User as FrontendUser } from '../types';
-import { PlusIcon, EyeIcon, XMarkIcon, ExclamationTriangleIcon, CheckIcon, CalendarIcon, UserIcon } from '../constants';
+import { PlusIcon, EyeIcon, XMarkIcon, ExclamationTriangleIcon, CheckIcon, CalendarIcon, UserCircleIcon } from '../constants';
 import { taskService } from '../taskService';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -1248,7 +1248,7 @@ export const TasksPage: React.FC<TasksPageProps> = ({ appTasks, setAppTasks, app
                             </div>
                             {assigneeName && (
                               <div className="flex items-center space-x-1 text-xs opacity-90">
-                                <UserIcon className="w-3 h-3" />
+                                <UserCircleIcon className="w-3 h-3" />
                                 <span className="truncate">{assigneeName}</span>
                               </div>
                             )}
